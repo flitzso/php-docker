@@ -1,0 +1,80 @@
+Guia Rápido para Montar um Projeto PHP no Docker
+Estrutura do Projeto:
+
+Crie um diretório para seu projeto e organize-o da seguinte forma:
+
+Copiar código
+php-docker-example/
+├── Dockerfile
+├── docker-compose.yml
+└── index.php
+
+Criar o Dockerfile:
+
+O Dockerfile define a imagem base e as instruções para configurar o ambiente. Para PHP, um exemplo básico é:
+
+Dockerfile
+Copiar código
+# Use a imagem oficial do PHP
+FROM php:8.2-apache
+
+# Copie o conteúdo da raiz do projeto para a pasta padrão do Apache
+COPY index.php /var/www/html/
+
+# Exponha a porta 80
+EXPOSE 80
+FROM php:8.2-apache usa a imagem do PHP com o Apache.
+COPY index.php /var/www/html/ copia o arquivo PHP para o diretório de documentos do Apache.
+EXPOSE 80 expõe a porta 80 para acesso HTTP.
+Criar o docker-compose.yml:
+
+O docker-compose.yml define os serviços e como eles interagem. Um exemplo básico é:
+
+yaml
+Copiar código
+version: '2.4'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+version: '2.4' define a versão do Compose.
+build: . indica que o Docker deve construir a imagem a partir do Dockerfile no diretório atual.
+ports: - "8080:80" mapeia a porta 80 do container para a porta 8080 do host.
+volumes: - .:/var/www/html mapeia o diretório atual no host para /var/www/html no container.
+Arquivo PHP (index.php):
+
+Crie o arquivo index.php na raiz do projeto com o conteúdo desejado:
+
+php
+Copiar código
+<?php
+
+echo "Sucess! Working!!!";
+
+Construir e Executar o Container:
+
+No terminal, navegue até o diretório do projeto e execute:
+
+sh
+Copiar código
+docker-compose up --build
+--build força a reconstrução da imagem.
+Acessar o Projeto:
+
+Abra um navegador e vá para:
+
+sh
+Copiar código
+http://localhost:8080
+Você deve ver a saída do index.php servido pelo Apache.
+
+Resumo
+Estrutura do Projeto: Coloque Dockerfile, docker-compose.yml, e index.php no mesmo diretório.
+Dockerfile: Define a imagem PHP e configura o Apache.
+docker-compose.yml: Configura o serviço Docker, mapeia portas e volumes.
+Construir e Executar: Use docker-compose up --build para construir e iniciar o container.
+Acessar: Navegue para http://localhost:8080 para ver o projeto em execução.
